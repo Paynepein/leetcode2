@@ -1,20 +1,25 @@
 class Solution {
 public:
     vector<string> wordBreak(string s, vector<string>& wordDict) {
-        vector<vector<string>> dp(s.size()+1, vector<string>());
-        dp[0].push_back("");
-        for (int i = 1; i <= s.size(); ++i) {
-        	for (int j = 0; j < i; ++j) {
-        		if (find(wordDict.begin(), wordDict.end(), s.substr(j, i-j)) != wordDict.end()) {
-        			for (string sentence : dp[j]) {
-        				dp[i].push_back(sentence + " " + s.substr(j, i-j));
-        			}
-        		}
-        	}
+        unordered_map<string, vector<string>> mp;
+        return wordBreakHelper(s, wordDict, mp);
+    }
+
+    vector<string> wordBreakHelper(string s, vector<string>& wordDict, unordered_map<string, vector<string>>& mp) {
+        if (mp.find(s) != mp.end()) return mp[s];
+        vector<string> res;
+        for (int i = 1; i < s.size(); ++i) {
+            string sub = s.substr(0, i);
+            if (find(wordDict.begin(), wordDict.end(), sub) != wordDict.end()) {
+                for (string sb : wordBreakHelper(s.substr(i), wordDict, mp)) {
+                    res.push_back(sub + " " + sb);
+                }
+            }
         }
-        for (string& sentence : dp[s.size()]) {
-        	sentence = sentence.substr(1);
+        if (find(wordDict.begin(), wordDict.end(), s) != wordDict.end()) {
+            res.push_back(s);
         }
-        return dp[s.size()];
+        mp[s] = res;
+        return res;
     }
 };
