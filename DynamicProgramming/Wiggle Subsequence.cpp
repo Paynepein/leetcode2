@@ -4,17 +4,18 @@ public:
     	if (nums.size() == 0) return 0;
         vector<int> big(nums.size(), 1);
         vector<int> small(nums.size(), 1);
-        int res = 1;
         for (int i = 1; i < nums.size(); ++i) {
-        	for (int j = 0; j < i; ++j) {
-        		if (nums[j] > nums[i]) {
-        			small[i] = max(small[i], big[j] + 1);
-        		} else if (nums[j] < nums[i]) {
-        			big[i] = max(big[i], small[j] + 1);
-        		}
-        	}
-        	res = max(res, max(big[i], small[i]));
+        	if (nums[i] < nums[i-1]) {
+        		small[i] = max(big[i-1] + 1, small[i-1]);
+        		big[i] = big[i-1];
+        	} else if (nums[i] > nums[i-1]) {
+       			big[i] = max(small[i-1] + 1, big[i-1]);
+       			small[i] = small[i-1];
+       		} else {
+       			big[i] = big[i-1];
+       			small[i] = small[i-1];
+       		}
         }
-        return res;
+        return max(big[nums.size()-1], small[nums.size()-1]);
     }
 };
