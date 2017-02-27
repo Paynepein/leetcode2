@@ -2,9 +2,10 @@ class Solution {
 public:
     int splitArray(vector<int>& nums, int m) {
         vector<long> dp1(nums.size()+1, 0), dp2(nums.size()+1, 0), *ptr1 = &dp1, *ptr2 = &dp2;
-        for (int i = 1; i <= m; ++i) {
+        for (int i = nums.size()-1; i >= 0; --i) dp2[i] += dp2[i+1] + nums[i];
+        for (int i = 2; i <= m; ++i) {
         	ptr1->clear();
-        	for (int j = 0; j <= nums.size()-i; ++j) {
+        	for (int j = nums.size()-i; j >= 0; --j) {
         		long sum = 0, tmp = INT_MAX;
         		for (int k = j; k <= nums.size()-i; ++k) {
         			sum += nums[k];
