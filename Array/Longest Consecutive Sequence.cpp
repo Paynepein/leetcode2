@@ -4,7 +4,7 @@ public:
   		unordered_map<int, int> mp;
   		int res = 0;
   		for (int n : nums) {
-  			if (mp.find(n) == mp.end()) {
+  			if (mp[n] == 0) {
   				mp[n] = mp[n - mp[n-1]] = mp[n + mp[n+1]] = mp[n - mp[n-1]] + 1 + mp[n + mp[n+1]];
   				res = max(res, mp[n]);
   			}
